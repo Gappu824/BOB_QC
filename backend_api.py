@@ -169,32 +169,32 @@ GDRIVE_FILES = {
     'karan_parwani': '1wMBHbmzKKJ5wy2qstMxsVc5tBCNcLAGk',
     'naina_pancholi': '1f8GtGMuwKSjg7arm6prlG_o1mj7ubfYh',
     'hemang_bhabhra': '1o0pP18JIBF-FIpJlRTP7liJPbjTlhh2A',
-    'yashika_sharma': 'YOUR_FILE_ID_HERE',
-    'piyush_dhakad': 'YOUR_FILE_ID_HERE',
-    'anuj_sharma': 'YOUR_FILE_ID_HERE',
+    'yashika_sharma': '1tqK20-4gK3olRlO1iLMoZhqGCjKsow5w',
+    'piyush_dhakad': '1i2vOrN3xiUKkdj84ZmO5FYd1Y3X1dp6G',
+    'anuj_sharma': '1FX1e2iOgKU7iXORwxIqQqqq84kLigoZP',
     
     # Teams (10)
-    'byte_busters': 'YOUR_FILE_ID_HERE',
-    'syntax_samurai': 'YOUR_FILE_ID_HERE',
-    'ruby_renegades': 'YOUR_FILE_ID_HERE',
-    'java_jesters': 'YOUR_FILE_ID_HERE',
-    'python_pioneers': 'YOUR_FILE_ID_HERE',
-    'quantum_coder': 'YOUR_FILE_ID_HERE',
-    'code_trail': 'YOUR_FILE_ID_HERE',
-    'data_mavericks': 'YOUR_FILE_ID_HERE',
-    'code_commanders': 'YOUR_FILE_ID_HERE',
-    'logic_luminaries': 'YOUR_FILE_ID_HERE',
+    'byte_busters': '1PxmHD0QVma-uFqh7ebPTb2LmADXCSHvM',
+    'syntax_samurai': '1XCLlvzHbqJo_eFhSD4iE1bgKWVhnf9VF',
+    'ruby_renegades': '1L7b8ntBK70uvUBHVBdmBYlDnrgJSYNg2',
+    'java_jesters': '1-tUbPMMDuiY8bK1RQZiLiYJqHlVtUX2v',
+    'python_pioneers': '185eEp_PCo0ZWrbIMyK6uG4Oup566pZ-1',
+    'quantum_coder': '1FqLX_tW2M7W99WdykM3Ytr_u4fTlM0Kz',
+    'code_trail': '1y4KOQPSIvZLtyLzJg5G6ezn0OsuStJJ9',
+    'data_mavericks': '1fp0aAPfAHG_zQpZIajbqFu0h4Vucd65P',
+    'code_commanders': '1y4KOQPSIvZLtyLzJg5G6ezn0OsuStJJ9',
+    'logic_luminaries': '1ZIv-YBcSL0w0BgolFpDwsw0OSKZIgIhG',
     
     # Coordinators (5)
-    'hiya_arya': 'YOUR_FILE_ID_HERE',
-    'ashank_agrawal': 'YOUR_FILE_ID_HERE',
-    'sarthak_sinha': 'YOUR_FILE_ID_HERE',
-    'manalika_agarwal': 'YOUR_FILE_ID_HERE',
-    'somya_upadhyay': 'YOUR_FILE_ID_HERE',
+    'hiya_arya': '1PS3tvNFlRqHD7Bkk1j65aKS8E2HRDFsM',
+    'ashank_agrawal': '1x9znzotyB5m_GtHXQksccn9e8otPuTzp',
+    'sarthak_sinha': '19hBvipViWQppFZRhh14ZRxJ85ACXLWzn',
+    'manalika_agarwal': '1xufWMXWBNqpN0QbfTV_lIUMQrJ5umYFX',
+    'somya_upadhyay': '1um7e3fBVlqHDEsMpllpzQhGrh5yrHSv1',
     
     # Faculty (2)
-    'shripal_sir': 'YOUR_FILE_ID_HERE',
-    'piyush_sir': 'YOUR_FILE_ID_HERE',
+    'shripal_sir': '1Z8gGZpv2zLgMe6slvlm5Qor1TX8DA_-M',
+    'piyush_sir': '1VaCgOKu-OAXFZE-1_WxTuYER7Qfi-2hd',
 }
 
 def gdrive_url(key):
