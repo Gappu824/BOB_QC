@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
 """
-BATTLE OF BYTES - PRODUCTION BACKEND (ALL ISSUES FIXED)
-=======================================================
-✅ Fixed bidding error (detached instance issue)
-✅ Fixed Faculty & Advisors empty display
-✅ Fixed player images not showing
-✅ Fixed player names (10 real participants)
-✅ Ready for deployment
-
-FIXES APPLIED:
-1. Bidding function properly handles session state
-2. Faculty seeding corrected
-3. Image URLs use correct paths
-4. All 10 participants correctly named
+BATTLE OF BYTES - PRODUCTION BACKEND (FINAL WITH REAL IMAGES)
+============================================================
+✅ All images pointing to actual static files
+✅ Player images: Using your uploaded JPG files
+✅ Team images: Using your uploaded JPG files  
+✅ Coordinator images: Using your uploaded PNG files
+✅ Faculty images: Using your uploaded JPG files
 """
 
 import os
@@ -161,7 +155,7 @@ def migrate_database():
         Session.remove()
 
 # ============================================================================
-# DATABASE SEEDING (FIXED)
+# DATABASE SEEDING (WITH REAL IMAGE PATHS)
 # ============================================================================
 
 def seed_data():
@@ -174,145 +168,165 @@ def seed_data():
             session.query(Player).delete()
             session.commit()
         
-        print("🌱 Seeding Players (10 participants with images)...")
+        print("🌱 Seeding Players (10 participants with REAL images)...")
         players = [
             Player(id=1, name='Abhinav Gupta', nickname='The Strategist', role='BTECH/25006/23', 
                    base_price=10000, current_bid=10000,
-                   image_url='https://i.pravatar.cc/300?img=12',
+                   image_url='/static/abhinav_gupta.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=2, name='Manisha Parwani', nickname='Code Ninja', role='BTECH/25063/23',
                    base_price=12000, current_bid=12000,
-                   image_url='https://i.pravatar.cc/300?img=47',
+                   image_url='/static/manisha_parwani.jpg',
                    bio='DBMS: ⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=3, name='Aviral Sharma', nickname='Data Wizard', role='BTECH/25150/23',
                    base_price=15000, current_bid=15000,
-                   image_url='https://i.pravatar.cc/300?img=15',
+                   image_url='/static/aviral_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=4, name='Shruti Khandelwal', nickname='Cloud Queen', role='MCA/25015/25',
                    base_price=11000, current_bid=11000,
-                   image_url='https://i.pravatar.cc/300?img=44',
+                   image_url='/static/shruti_khandelwal.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=5, name='Karan Parwani', nickname='Full Stack Pro', role='MCA/25007/25',
                    base_price=13000, current_bid=13000,
-                   image_url='https://i.pravatar.cc/300?img=33',
+                   image_url='/static/karan_parwani.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=6, name='Naina V Pancholi', nickname='Backend Expert', role='BTECH/25030/22',
                    base_price=14000, current_bid=14000,
-                   image_url='https://i.pravatar.cc/300?img=48',
+                   image_url='/static/naina_pancholi.jpg',
                    bio='DBMS: ⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=7, name='Hemang Bhabhra', nickname='Algorithm Master', role='BTECH/25027/22',
                    base_price=12500, current_bid=12500,
-                   image_url='https://i.pravatar.cc/300?img=17',
+                   image_url='/static/hemang_bhabhra.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=8, name='Yashika Sharma', nickname='Frontend Wizard', role='MSCAI/25002/25',
                    base_price=11500, current_bid=11500,
-                   image_url='https://i.pravatar.cc/300?img=45',
+                   image_url='/static/yashika_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=9, name='Piyush Singh Dhakad', nickname='DevOps Guru', role='MSCAI/25005/25',
                    base_price=13500, current_bid=13500,
-                   image_url='https://i.pravatar.cc/300?img=68',
+                   image_url='/static/piyush_dhakad.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=10, name='Anuj Sharma', nickname='ML Engineer', role='MCA/25022/25',
                    base_price=12000, current_bid=12000,
-                   image_url='https://i.pravatar.cc/300?img=59',
+                   image_url='/static/anuj_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
         ]
         session.add_all(players)
         
         if session.query(Poll).count() == 0:
-            print("🌱 Seeding Poll Teams...")
+            print("🌱 Seeding Poll Teams (with REAL images)...")
             teams = [
-                Poll(team_name='Byte Busters', image_url='https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Byte+Busters', video_url='/static/byte_busters_video.mp4'),
-                Poll(team_name='Syntax Samurai', image_url='https://via.placeholder.com/400x300/7c2d12/ffffff?text=Syntax+Samurai', video_url='/static/syntax_samurai_video.mp4'),
-                Poll(team_name='Ruby Renegades', image_url='https://via.placeholder.com/400x300/991b1b/ffffff?text=Ruby+Renegades', video_url='/static/ruby_renegades_video.mp4'),
-                Poll(team_name='Java Jesters', image_url='https://via.placeholder.com/400x300/0369a1/ffffff?text=Java+Jesters', video_url='/static/java_jesters_video.mp4'),
-                Poll(team_name='Python Pioneers', image_url='https://via.placeholder.com/400x300/065f46/ffffff?text=Python+Pioneers', video_url='/static/python_pioneers_video.mp4'),
-                Poll(team_name='Quantum Coders', image_url='https://via.placeholder.com/400x300/4c1d95/ffffff?text=Quantum+Coders', video_url='/static/quantum_coder_video.mp4'),
-                Poll(team_name='Code Trail', image_url='https://via.placeholder.com/400x300/92400e/ffffff?text=Code+Trail', video_url='/static/code_trail_video.mp4'),
-                Poll(team_name='Data Mavericks', image_url='https://via.placeholder.com/400x300/334155/ffffff?text=Data+Mavericks', video_url='/static/data_mavericks_video.mp4'),
-                Poll(team_name='Code Commanders', image_url='https://via.placeholder.com/400x300/713f12/ffffff?text=Code+Commanders', video_url='/static/code_commanders_video.mp4'),
-                Poll(team_name='Logic Luminaries', image_url='https://via.placeholder.com/400x300/9f1239/ffffff?text=Logic+Luminaries', video_url='/static/logic_luminaries_video.mp4'),
+                Poll(team_name='Byte Busters', image_url='/static/byte_busters.jpg', video_url='/static/byte_busters_video.mp4'),
+                Poll(team_name='Syntax Samurai', image_url='/static/syntax_samurai.jpg', video_url='/static/syntax_samurai_video.mp4'),
+                Poll(team_name='Ruby Renegades', image_url='/static/ruby_renegades.jpg', video_url='/static/ruby_renegades_video.mp4'),
+                Poll(team_name='Java Jesters', image_url='/static/java_jesters.jpg', video_url='/static/java_jesters_video.mp4'),
+                Poll(team_name='Python Pioneers', image_url='/static/python_pioneers.jpg', video_url='/static/python_pioneers_video.mp4'),
+                Poll(team_name='Quantum Coders', image_url='/static/quantum_coder.jpg', video_url='/static/quantum_coder_video.mp4'),
+                Poll(team_name='Code Trail', image_url='/static/code_trail.jpg', video_url='/static/code_trail_video.mp4'),
+                Poll(team_name='Data Mavericks', image_url='/static/data_mavericks.jpg', video_url='/static/data_mavericks_video.mp4'),
+                Poll(team_name='Code Commanders', image_url='/static/code_commanders.jpg', video_url='/static/code_commanders_video.mp4'),
+                Poll(team_name='Logic Luminaries', image_url='/static/logic_luminaries.jpg', video_url='/static/logic_luminaries_video.mp4'),
             ]
             session.add_all(teams)
 
-        # FIXED: Clear and reseed people data to ensure Faculty shows up
+        # Clear and reseed people data
         if session.query(Person).count() > 0:
             print("🗑️ Clearing old people data...")
             session.query(Person).delete()
             session.commit()
         
-        print("🌱 Seeding People (Coordinators, Teams, Faculty)...")
+        print("🌱 Seeding People (with REAL images)...")
         people = [
-            # HEAD COORDINATORS
+            # HEAD COORDINATORS (using PNG files from your static folder)
             Person(name='Hiya Arya', role='Head Coordinator', email='hiya@bob.com', 
-                   bio='Promotion & Operation Lead', image_url='https://i.pravatar.cc/150?img=5', social_handle='@hushhiya'),
+                   bio='Promotion & Operation Lead', 
+                   image_url='/static/hiya_arya.png', 
+                   social_handle='@hushhiya'),
             Person(name='Ashank Agrawal', role='Head Coordinator', email='ashank@bob.com',
-                   bio='Co Tech Lead', image_url='https://i.pravatar.cc/150?img=13', social_handle='@ashankagrawal'),
+                   bio='Co Tech Lead', 
+                   image_url='/static/ashank_agrawal.png', 
+                   social_handle='@ashankagrawal'),
             Person(name='Sarthak Sinha', role='Head Coordinator', email='sarthak@bob.com',
-                   bio='Design & Social Media Lead', image_url='https://i.pravatar.cc/150?img=11', social_handle='@sarthak.sinhahaha'),
+                   bio='Design & Social Media Lead', 
+                   image_url='/static/sarthak_sinha.png', 
+                   social_handle='@sarthak.sinhahaha'),
             Person(name='Manalika Agarwal', role='Head Coordinator', email='manalika@bob.com',
-                   bio='Co Tech Lead', image_url='https://i.pravatar.cc/150?img=1', social_handle='@manalika__'),
+                   bio='Co Tech Lead', 
+                   image_url='/static/manalika_agarwal.png', 
+                   social_handle='@manalika__'),
             Person(name='Somya Upadhyay', role='Head Coordinator', email='somya@bob.com',
-                   bio='Sponsorship Lead', image_url='https://i.pravatar.cc/150?img=9', social_handle='@__.somyaaaaa__'),
+                   bio='Sponsorship Lead', 
+                   image_url='/static/somya_upadhyay.png', 
+                   social_handle='@__.somyaaaaa__'),
             
-            # BIDDING TEAMS
+            # BIDDING TEAMS (using JPG files from your static folder)
             Person(name='Byte Busters', role='Bidding Team', email='busters@team.com', 
                    bio='Mentored by Anju Ma\'am. Risk-takers and crowd favorites.',
-                   image_url='https://via.placeholder.com/200x200/1e3a8a/ffffff?text=BB', video_url='/static/byte_busters_video.mp4'),
+                   image_url='/static/byte_busters.jpg', 
+                   video_url='/static/byte_busters_video.mp4'),
             Person(name='Syntax Samurai', role='Bidding Team', email='samurai@team.com', 
                    bio='Mentored by Vivek Gaur Sir & Madan Sir. Precision bidding experts.',
-                   image_url='https://via.placeholder.com/200x200/7c2d12/ffffff?text=SS', video_url='/static/syntax_samurai_video.mp4'),
+                   image_url='/static/syntax_samurai.jpg', 
+                   video_url='/static/syntax_samurai_video.mp4'),
             Person(name='Ruby Renegades', role='Bidding Team', email='renegades@team.com', 
                    bio='Mentored by Abhishek Sir & Santosh Kumar Agarwal Sir. The dark horse team.',
-                   image_url='https://via.placeholder.com/200x200/991b1b/ffffff?text=RR', video_url='/static/ruby_renegades_video.mp4'),
+                   image_url='/static/ruby_renegades.jpg', 
+                   video_url='/static/ruby_renegades_video.mp4'),
             Person(name='Java Jesters', role='Bidding Team', email='jesters@team.com', 
                    bio='Mentored by Santosh Sharma Sir. Meticulous planners.',
-                   image_url='https://via.placeholder.com/200x200/0369a1/ffffff?text=JJ', video_url='/static/java_jesters_video.mp4'),
+                   image_url='/static/java_jesters.jpg', 
+                   video_url='/static/java_jesters_video.mp4'),
             Person(name='Python Pioneers', role='Bidding Team', email='pioneers@team.com', 
                    bio='Mentored by Seema Ma\'am & Archana Ma\'am. Data science specialists.',
-                   image_url='https://via.placeholder.com/200x200/065f46/ffffff?text=PP', video_url='/static/python_pioneers_video.mp4'),
+                   image_url='/static/python_pioneers.jpg', 
+                   video_url='/static/python_pioneers_video.mp4'),
             Person(name='Quantum Coders', role='Bidding Team', email='quantum@team.com', 
                    bio='Mentored by Pankaj Sir. Deep pockets, high potential focus.',
-                   image_url='https://via.placeholder.com/200x200/4c1d95/ffffff?text=QC', video_url='/static/quantum_coder_video.mp4'),
+                   image_url='/static/quantum_coder.jpg', 
+                   video_url='/static/quantum_coder_video.mp4'),
             Person(name='Code Trail', role='Bidding Team', email='trail@team.com', 
                    bio='Mentored by Gurminder Sir. Newest team with fresh tactics.',
-                   image_url='https://via.placeholder.com/200x200/92400e/ffffff?text=CT', video_url='/static/code_trail_video.mp4'),
+                   image_url='/static/code_trail.jpg', 
+                   video_url='/static/code_trail_video.mp4'),
             Person(name='Data Mavericks', role='Bidding Team', email='mavericks@team.com', 
                    bio='Mentored by B. Pathak Sir. Backend database experts.',
-                   image_url='https://via.placeholder.com/200x200/334155/ffffff?text=DM', video_url='/static/data_mavericks_video.mp4'),
+                   image_url='/static/data_mavericks.jpg', 
+                   video_url='/static/data_mavericks_video.mp4'),
             Person(name='Code Commanders', role='Bidding Team', email='commanders@team.com', 
                    bio='Mentored by Puneet Sir. Strategic budget managers.',
-                   image_url='https://via.placeholder.com/200x200/713f12/ffffff?text=CC', video_url='/static/code_commanders_video.mp4'),
+                   image_url='/static/code_commanders.jpg', 
+                   video_url='/static/code_commanders_video.mp4'),
             Person(name='Logic Luminaries', role='Bidding Team', email='luminaries@team.com', 
                    bio='Mentored by Vishambhar Pathak Sir. Data-driven analysts.',
-                   image_url='https://via.placeholder.com/200x200/9f1239/ffffff?text=LL', video_url='/static/logic_luminaries_video.mp4'),
+                   image_url='/static/logic_luminaries.jpg', 
+                   video_url='/static/logic_luminaries_video.mp4'),
             
-            # FACULTY & ADVISORS (FIXED - Now properly added)
+            # FACULTY & ADVISORS (using JPG files from your static folder)
             Person(name='Shripal Sir', role='Faculty Advisor', email='shripal@college.edu', 
                    bio='Senior faculty overseeing Battle of Bytes.', 
-                   image_url='https://i.pravatar.cc/150?img=60'),
+                   image_url='/static/shripal_sir.jpg'),
             Person(name='Piyush Sir', role='Faculty Advisor', email='piyush@college.edu', 
                    bio='Faculty coordinator managing logistics.', 
-                   image_url='https://i.pravatar.cc/150?img=61'),
+                   image_url='/static/piyush_sir.jpg'),
         ]
         session.add_all(people)
         
@@ -322,7 +336,7 @@ def seed_data():
             session.add(Setting(id=1, end_time=end_time))
             
         session.commit()
-        print('✅ Database seeded successfully!')
+        print('✅ Database seeded with REAL image paths!')
     except Exception as e:
         print(f"🔥 Seeding error: {e}")
         session.rollback()
@@ -393,7 +407,6 @@ def api_player_detail(player_id):
     ]
     return jsonify(player_data)
 
-# FIXED: Bidding function to prevent detached instance error
 @app.route('/api/bid', methods=['POST'])
 def api_place_bid():
     session = Session()
@@ -421,7 +434,6 @@ def api_place_bid():
         session.add(new_bid)
         session.commit()
         
-        # Use stored player_name to avoid detached instance error
         log_activity('bid', f"{bidder_name} bid ${bid_amount:,} on {player_name}")
         socketio.emit('bid_update', {
             'player_id': player_id,
@@ -533,22 +545,20 @@ def index():
     <!DOCTYPE html>
     <html><head><title>Battle of Bytes API</title></head>
     <body style="font-family:Arial;padding:40px;background:#0a0a0a;color:#fff;">
-        <h1>🏆 Battle of Bytes API - FIXED VERSION</h1>
-        <h2>✅ All Issues Resolved:</h2>
+        <h1>🏆 Battle of Bytes API - Using Real Images</h1>
+        <h2>✅ All Images Now Point to Static Folder:</h2>
         <ul style="color:#22c55e;">
-            <li>✅ Bidding errors fixed (detached instance)</li>
-            <li>✅ Faculty & Advisors now display correctly</li>
-            <li>✅ Player images using online placeholders</li>
-            <li>✅ All 10 participant names correct</li>
+            <li>✅ Player images from /static/*.jpg</li>
+            <li>✅ Team images from /static/*.jpg</li>
+            <li>✅ Coordinator images from /static/*.png</li>
+            <li>✅ Faculty images from /static/*.jpg</li>
         </ul>
         <h2>API Endpoints:</h2>
         <ul>
-            <li><a href="/api/players" style="color:#0071e3;">/api/players</a> - Get all players</li>
-            <li><a href="/api/poll" style="color:#0071e3;">/api/poll</a> - Get teams</li>
-            <li><a href="/api/people" style="color:#0071e3;">/api/people</a> - Get coordinators, teams, faculty</li>
-            <li><a href="/api/activity" style="color:#0071e3;">/api/activity</a> - Recent activity</li>
-            <li><a href="/api/status" style="color:#0071e3;">/api/status</a> - Auction status</li>
-            <li><a href="/health" style="color:#0071e3;">/health</a> - Health check</li>
+            <li><a href="/api/players" style="color:#0071e3;">/api/players</a></li>
+            <li><a href="/api/poll" style="color:#0071e3;">/api/poll</a></li>
+            <li><a href="/api/people" style="color:#0071e3;">/api/people</a></li>
+            <li><a href="/api/status" style="color:#0071e3;">/api/status</a></li>
         </ul>
     </body></html>
     """)
@@ -588,7 +598,7 @@ def initialize_database():
 
 def start_server():
     print('\n' + '='*80)
-    print('🏆 BATTLE OF BYTES 2.0 - FIXED BACKEND')
+    print('🏆 BATTLE OF BYTES 2.0 - PRODUCTION (REAL IMAGES)')
     print('='*80)
     
     initialize_database()
@@ -604,11 +614,11 @@ def start_server():
     port = int(os.environ.get('PORT', 5000))
     print(f"\n🚀 Server: http://0.0.0.0:{port}")
     print(f"📁 Static: {STATIC_FOLDER}")
-    print(f"\n✅ ALL FIXES APPLIED:")
-    print(f"   • Bidding errors resolved")
-    print(f"   • Faculty section now populated")
-    print(f"   • Player images from online CDN")
-    print(f"   • 10 participants with correct names")
+    print(f"\n✅ ALL IMAGES FROM STATIC FOLDER:")
+    print(f"   • Players: abhinav_gupta.jpg, manisha_parwani.jpg, etc.")
+    print(f"   • Teams: byte_busters.jpg, syntax_samurai.jpg, etc.")
+    print(f"   • Coordinators: hiya_arya.png, ashank_agrawal.png, etc.")
+    print(f"   • Faculty: shripal_sir.jpg, piyush_sir.jpg")
     print('='*80 + '\n')
     
     socketio.run(app, host='0.0.0.0', port=port, debug=False)
