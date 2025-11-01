@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v19 (Final Mentor List)
+BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v20 (Corrected Faculty)
 =====================================================================
 - Uses PostgreSQL for persistent data on Render's free tier
 - Serves static files (logo, images, videos) from the repo's 'static' folder
 - Includes APScheduler to reset polls daily (meets bonus requirement)
-- Seeding data UPDATED with the final, correct list of 10 teams and their mentors.
-- UPDATED: api_place_bid function replaced with user-provided, more robust version.
+- Seeding data UPDATED:
+    - Faculty & Advisors section now ONLY contains Shripal Sir & Piyush Sir.
+    - Bidding Team bios include their mentors as requested.
 """
 
 import os
@@ -117,7 +118,7 @@ class Person(Base):
     __tablename__ = 'people'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
-    role = Column(String) # 'Head Coordinator', 'Bidding Team', 'Faculty Mentor'
+    role = Column(String) # 'Head Coordinator', 'Bidding Team', 'Faculty Advisor'
     email = Column(String)
     bio = Column(Text)
     image_url = Column(String)
@@ -137,7 +138,7 @@ class Setting(Base):
     end_time = Column(String) # ISO format
 
 # ============================================================================
-# DATABASE SEEDING
+# DATABASE SEEDING (UPDATED)
 # ============================================================================
 
 def seed_data():
@@ -193,7 +194,7 @@ def seed_data():
                        bio='Sponsorship Lead', image_url='/static/somya_upadhyay.png', 
                        social_handle='@__.somyaaaaa__'),
                 
-                # BIDDING TEAMS
+                # BIDDING TEAMS (Bios include mentor names)
                 Person(name='Byte Busters', role='Bidding Team', email='contact@busters.org', 
                        bio='Mentored by Anju ma\'am. A crowd favorite, known for taking risks.', 
                        image_url='/static/byte_busters.jpg',
@@ -220,7 +221,7 @@ def seed_data():
                        video_url='/static/quantum_coder_video.mp4'),
                 Person(name='Code Trail', role='Bidding Team', email='lead@codetrail.com', 
                        bio='Mentored by Gurminder Sir. The newest team to join the battle.', 
-                       image_url='/static/code_trail.jpg',
+                       image_url='/static/code_trail.jpg', 
                        video_url='/static/code_trail_video.mp4'), 
                 Person(name='Data Mavericks', role='Bidding Team', email='scouts@mavericks.db', 
                        bio='Mentored by B. Pathak Sir. Focused on backend superstars.', 
@@ -236,46 +237,14 @@ def seed_data():
                        video_url='/static/logic_luminaries_video.mp4'),
 
                 
-                # FACULTY & MENTORS
-                Person(name='Anju Ma\'am', role='Faculty Mentor', email='anju@college.edu',
-                       bio='Mentor for Byte Busters.',
-                       image_url='/static/anju_mam.png'),
-                Person(name='Vivek Gaur Sir', role='Faculty Mentor', email='vivek@college.edu',
-                       bio='Mentor for Syntax Samurai.',
-                       image_url='/static/vivek_gaur_sir.png'),
-                Person(name='Madan Sir', role='Faculty Mentor', email='madan@college.edu',
-                       bio='Mentor for Syntax Samurai.',
-                       image_url='/static/madan_sir.png'),
-                Person(name='Abhishek Sir', role='Faculty Mentor', email='abhishek@college.edu',
-                       bio='Mentor for Ruby Renegades.',
-                       image_url='/static/abhishek_sir.png'),
-                Person(name='Santosh Kumar Agarwal Sir', role='Faculty Mentor', email='santosh.ka@college.edu',
-                       bio='Mentor for Ruby Renegades.',
-                       image_url='/static/santosh_k_agarwal_sir.png'),
-                Person(name='Santosh Sharma Sir', role='Faculty Mentor', email='santosh.s@college.edu',
-                       bio='Mentor for Java Jesters.',
-                       image_url='/static/santosh_sharma_sir.png'),
-                Person(name='Seema Mam', role='Faculty Mentor', email='seema@college.edu',
-                       bio='Mentor for Python Pioneers.',
-                       image_url='/static/seema_mam.png'),
-                Person(name='Archana Mam', role='Faculty Mentor', email='archana@college.edu',
-                       bio='Mentor for Python Pioneers.',
-                       image_url='/static/archana_mam.png'),
-                Person(name='Pankaj Sir', role='Faculty Mentor', email='pankaj@college.edu',
-                       bio='Mentor for Quantum Coders.',
-                       image_url='/static/pankaj_sir.png'),
-                Person(name='Gurminder Sir', role='Faculty Mentor', email='gurminder@college.edu',
-                       bio='Mentor for Code Trail.',
-                       image_url='/static/gurminder_sir.png'),
-                Person(name='Dr. B. Pathak Sir', role='Faculty Mentor', email='bp@college.edu',
-                       bio='Mentor for Data Mavericks.',
-                       image_url='/static/b_pathak_sir.png'),
-                Person(name='Puneet Sir', role='Faculty Mentor', email='puneet@college.edu',
-                       bio='Mentor for Code Commanders.',
-                       image_url='/static/puneet_sir.png'),
-                Person(name='Dr. Vishambhar Pathak Sir', role='Faculty Mentor', email='vp@college.edu',
-                       bio='Mentor for Logic Luminaries.',
-                       image_url='/static/vishambhar_pathak_sir.png'),
+                # --- NEW FACULTY & ADVISORS SECTION ---
+                # Only Shripal Sir and Piyush Sir as requested
+                Person(name='Shripal Sir', role='Faculty Advisor', email='shripal@college.edu', 
+                       bio='Overseeing the Battle of Bytes event.', 
+                       image_url='/static/shripal_sir.png'), # <-- You must add 'shripal_sir.png'
+                Person(name='Piyush Sir', role='Faculty Advisor', email='piyush@college.edu', 
+                       bio='Coordinating the faculty and student teams.', 
+                       image_url='/static/piyush_sir.png'), # <-- You must add 'piyush_sir.png'
             ]
             session.add_all(people)
         
@@ -362,7 +331,6 @@ def api_player_detail(player_id):
     ]
     return jsonify(player_data)
 
-# --- THIS IS YOUR UPDATED FUNCTION ---
 @app.route('/api/bid', methods=['POST'])
 def api_place_bid():
     """Submits a new bid for a player."""
@@ -380,7 +348,6 @@ def api_place_bid():
         if bid_amount <= player.current_bid:
             return jsonify({'error': f'Bid must be higher than ${player.current_bid:,}'}), 400
         
-        # Save the player's name before the commit (prevents detached-instance error)
         player_name = player.name
         
         player.current_bid = bid_amount
@@ -392,7 +359,6 @@ def api_place_bid():
         
         session.commit()
         
-        # Use the saved variable (player_name)
         log_activity('bid', f'{bidder_name} bid ${bid_amount:,} on {player_name}')
         
         socketio.emit('bid_update', {
@@ -410,8 +376,7 @@ def api_place_bid():
         return jsonify({'error': str(e)}), 500
     
     finally:
-        session.close()  # close the session you actually opened
-# --- END OF YOUR UPDATED FUNCTION ---
+        session.close()
 
 @app.route('/api/enquiry', methods=['POST'])
 def api_enquiry():
