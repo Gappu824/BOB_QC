@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """
-BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v17 (POSTGRESQL + STATIC FILES)
+BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v19 (Final Mentor List)
 =====================================================================
 - Uses PostgreSQL for persistent data on Render's free tier
 - Serves static files (logo, images, videos) from the repo's 'static' folder
-- All API endpoints and WebSocket logic are the same
 - Includes APScheduler to reset polls daily (meets bonus requirement)
-- Database 'Person' model updated with 'video_url'
-- Seeding data updated with paths to all new static assets
+- Seeding data UPDATED with the final, correct list of 10 teams and their mentors.
 """
 
 import os
@@ -48,8 +46,6 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 if not DATABASE_URL:
     print("🔥 ERROR: DATABASE_URL environment variable not set.")
     print("This app is designed for a PostgreSQL database (e.g., on Render).")
-    # You can uncomment this next line for local-only testing with SQLite
-    # DATABASE_URL = 'sqlite:///./local_auction.db' 
     if not DATABASE_URL.startswith('sqlite'):
         sys.exit(1)
 
@@ -67,8 +63,6 @@ except Exception as e:
     sys.exit(1)
 print("✅ Database connection initiated.")
 
-# Define the static folder. This tells Flask to look for a folder named 'static'
-# in the same directory as this script.
 STATIC_FOLDER = os.path.join(os.path.dirname(__file__), 'static')
 app = Flask(__name__, static_folder=STATIC_FOLDER) 
 
@@ -77,7 +71,7 @@ CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 # ============================================================================
-# DATABASE MODELS (UPDATED)
+# DATABASE MODELS
 # ============================================================================
 
 class Player(Base):
@@ -122,12 +116,12 @@ class Person(Base):
     __tablename__ = 'people'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
-    role = Column(String) # 'Head Coordinator', 'Bidding Team', 'Faculty Advisor'
+    role = Column(String) # 'Head Coordinator', 'Bidding Team', 'Faculty Mentor'
     email = Column(String)
     bio = Column(Text)
     image_url = Column(String)
     social_handle = Column(String)
-    video_url = Column(String)  # <-- UPDATED: Added video_url
+    video_url = Column(String)
 
 class ActivityLog(Base):
     __tablename__ = 'activity_log'
@@ -167,21 +161,22 @@ def seed_data():
             ]
             session.add_all(players)
         
+        # --- UPDATED: Added "Code Trail" ---
         if session.query(Poll).count() == 0:
-            print("🌱 Seeding Poll Teams...")
+            print("🌱 Seeding Poll Teams (10 teams)...")
             teams = [
-                Poll(team_name='Java Jesters'), Poll(team_name='Quantum Coder'), Poll(team_name='Syntax Samurai'),
+                Poll(team_name='Java Jesters'), Poll(team_name='Quantum Coders'), Poll(team_name='Syntax Samurai'),
                 Poll(team_name='Logic Luminaries'), Poll(team_name='Byte Busters'), Poll(team_name='Python Pioneers'),
                 Poll(team_name='Code Commanders'), Poll(team_name='Ruby Renegades'), Poll(team_name='Data Mavericks'),
+                Poll(team_name='Code Trail') # <-- NEW
             ]
             session.add_all(teams)
 
         if session.query(Person).count() == 0:
             print("🌱 Seeding People (Coordinators, Teams, Faculty)...")
             
-            # --- UPDATED TO MATCH YOUR FILE NAMES ---
             people = [
-                # HEAD COORDINATORS (using your new .png files)
+                # HEAD COORDINATORS
                 Person(name='Hiya Arya', role='Head Coordinator', email='hiya@battleofbytes.com', 
                        bio='Promotion & Operation Lead', image_url='/static/hiya_arya.png', 
                        social_handle='@hushhiya'),
@@ -198,59 +193,98 @@ def seed_data():
                        bio='Sponsorship Lead', image_url='/static/somya_upadhyay.png', 
                        social_handle='@__.somyaaaaa__'),
                 
-                # BIDDING TEAMS (using both .jpg and .mp4 files)
-                Person(name='Java Jesters', role='Bidding Team', email='captains@jesters.com', 
-                       bio='Known for meticulous planning and aggressive bidding strategies.', 
-                       image_url='/static/java_jesters.jpg',
-                       video_url='/static/java_jesters_video.mp4'),
-                
-                Person(name='Quantum Coder', role='Bidding Team', email='lead@quantum.dev', 
-                       bio='A mysterious team with deep pockets.', 
-                       image_url='/static/quantum_coder.jpg',
-                       video_url='/static/quantum_coder_video.mp4'),
-                
-                Person(name='Syntax Samurai', role='Bidding Team', email='master@samurai.io', 
-                       bio='They strike with precision, waiting for the perfect moment.', 
-                       image_url='/static/syntax_samurai.jpg',
-                       video_url='/static/syntax_samurai_video.mp4'),
-
-                Person(name='Logic Luminaries', role='Bidding Team', email='info@luminaries.ai', 
-                       bio='Data-driven and analytical, they bid only on proven assets.', 
-                       image_url='/static/logic_luminaries.jpg',
-                       video_url='/static/logic_luminaries_video.mp4'),
-                       
+                # --- UPDATED BIDDING TEAMS (based on your new list) ---
                 Person(name='Byte Busters', role='Bidding Team', email='contact@busters.org', 
-                       bio='A crowd favorite, known for breaking the bank and taking risks.', 
+                       bio='Mentored by Anju ma\'am. A crowd favorite, known for taking risks.', 
                        image_url='/static/byte_busters.jpg',
                        video_url='/static/byte_busters_video.mp4'),
 
+                Person(name='Syntax Samurai', role='Bidding Team', email='master@samurai.io', 
+                       bio='Mentored by Vivek Gaur Sir & Madan Sir. They strike with precision.', 
+                       image_url='/static/syntax_samurai.jpg',
+                       video_url='/static/syntax_samurai_video.mp4'),
+
+                Person(name='Ruby Renegades', role='Bidding Team', email='hello@renegades.rb', 
+                       bio='Mentored by Abhishek Sir & Santosh Kumar Agarwal Sir. The dark horse team.', 
+                       image_url='/static/ruby_renegades.jpg',
+                       video_url='/static/ruby_renegades_video.mp4'),
+                
+                Person(name='Java Jesters', role='Bidding Team', email='captains@jesters.com', 
+                       bio='Mentored by Santosh Sharma Sir. Known for meticulous planning.', 
+                       image_url='/static/java_jesters.jpg',
+                       video_url='/static/java_jesters_video.mp4'),
+
                 Person(name='Python Pioneers', role='Bidding Team', email='team@pioneers.py', 
-                       bio='Specialists in data science and ML talent.', 
+                       bio='Mentored by Seema Mam & Archana Mam. Specialists in data science.', 
                        image_url='/static/python_pioneers.jpg',
                        video_url='/static/python_pioneers_video.mp4'),
 
-                Person(name='Code Commanders', role='Bidding Team', email='hq@commanders.com', 
-                       bio='Strategic and disciplined budget management.', 
-                       image_url='/static/code_commanders.jpg',
-                       video_url='/static/code_commanders_video.mp4'),
-
-                Person(name='Ruby Renegades', role='Bidding Team', email='hello@renegades.rb', 
-                       bio='The dark horse team, looking for unconventional talent.', 
-                       image_url='/static/ruby_renegades.jpg',
-                       video_url='/static/ruby_renegades_video.mp4'),
+                Person(name='Quantum Coders', role='Bidding Team', email='lead@quantum.dev', 
+                       bio='Mentored by Pankaj Sir. A mysterious team with deep pockets.', 
+                       image_url='/static/quantum_coder.jpg',
+                       video_url='/static/quantum_coder_video.mp4'),
+                
+                Person(name='Code Trail', role='Bidding Team', email='lead@codetrail.com', 
+                       bio='Mentored by Gurminder Sir. The newest team to join the battle.', 
+                       image_url='/static/code_trail.jpg', # You need to add 'code_trail.jpg'
+                       video_url='/static/code_trail_video.mp4'), # You need to add 'code_trail_video.mp4'
 
                 Person(name='Data Mavericks', role='Bidding Team', email='scouts@mavericks.db', 
-                       bio='Focused entirely on backend and database superstars.', 
+                       bio='Mentored by B. Pathak Sir. Focused on backend superstars.', 
                        image_url='/static/data_mavericks.jpg',
                        video_url='/static/data_mavericks_video.mp4'),
                 
-                # FACULTY (using placeholders for now)
-                Person(name='Dr. Priya Sharma', role='Faculty Advisor', email='p.sharma@college.edu', 
-                       bio='Head Faculty Coordinator overseeing all event logistics.', 
-                       image_url='https://i.pravatar.cc/300?img=60'),
-                Person(name='Prof. Rajesh Kumar', role='Faculty Judge', email='r.kumar@college.edu', 
-                       bio='Lead judge and auction overseer ensuring fair play.', 
-                       image_url='https://i.pravatar.cc/300?img=61'),
+                Person(name='Code Commanders', role='Bidding Team', email='hq@commanders.com', 
+                       bio='Mentored by Puneet Sir. Strategic and disciplined budget management.', 
+                       image_url='/static/code_commanders.jpg',
+                       video_url='/static/code_commanders_video.mp4'),
+                
+                Person(name='Logic Luminaries', role='Bidding Team', email='info@luminaries.ai', 
+                       bio='Mentored by Vishambhar Pathak Sir. Data-driven and analytical.', 
+                       image_url='/static/logic_luminaries.jpg',
+                       video_url='/static/logic_luminaries_video.mp4'),
+
+                
+                # --- UPDATED FACULTY & MENTORS ---
+                Person(name='Anju Ma\'am', role='Faculty Mentor', email='anju@college.edu',
+                       bio='Mentor for Byte Busters.',
+                       image_url='/static/anju_mam.png'), # You must add this file
+                Person(name='Vivek Gaur Sir', role='Faculty Mentor', email='vivek@college.edu',
+                       bio='Mentor for Syntax Samurai.',
+                       image_url='/static/vivek_gaur_sir.png'), # You must add this file
+                Person(name='Madan Sir', role='Faculty Mentor', email='madan@college.edu',
+                       bio='Mentor for Syntax Samurai.',
+                       image_url='/static/madan_sir.png'), # You must add this file
+                Person(name='Abhishek Sir', role='Faculty Mentor', email='abhishek@college.edu',
+                       bio='Mentor for Ruby Renegades.',
+                       image_url='/static/abhishek_sir.png'),
+                Person(name='Santosh Kumar Agarwal Sir', role='Faculty Mentor', email='santosh.ka@college.edu',
+                       bio='Mentor for Ruby Renegades.',
+                       image_url='/static/santosh_k_agarwal_sir.png'),
+                Person(name='Santosh Sharma Sir', role='Faculty Mentor', email='santosh.s@college.edu',
+                       bio='Mentor for Java Jesters.',
+                       image_url='/static/santosh_sharma_sir.png'),
+                Person(name='Seema Mam', role='Faculty Mentor', email='seema@college.edu',
+                       bio='Mentor for Python Pioneers.',
+                       image_url='/static/seema_mam.png'),
+                Person(name='Archana Mam', role='Faculty Mentor', email='archana@college.edu',
+                       bio='Mentor for Python Pioneers.',
+                       image_url='/static/archana_mam.png'),
+                Person(name='Pankaj Sir', role='Faculty Mentor', email='pankaj@college.edu',
+                       bio='Mentor for Quantum Coders.',
+                       image_url='/static/pankaj_sir.png'), # You must add this file
+                Person(name='Gurminder Sir', role='Faculty Mentor', email='gurminder@college.edu',
+                       bio='Mentor for Code Trail.',
+                       image_url='/static/gurminder_sir.png'), # You must add this file
+                Person(name='Dr. B. Pathak Sir', role='Faculty Mentor', email='bp@college.edu',
+                       bio='Mentor for Data Mavericks.',
+                       image_url='/static/b_pathak_sir.png'), # Use 'b_pathak_sir.png' or a generic one
+                Person(name='Puneet Sir', role='Faculty Mentor', email='puneet@college.edu',
+                       bio='Mentor for Code Commanders.',
+                       image_url='/static/puneet_sir.png'),
+                Person(name='Dr. Vishambhar Pathak Sir', role='Faculty Mentor', email='vp@college.edu',
+                       bio='Mentor for Logic Luminaries.',
+                       image_url='/static/vishambhar_pathak_sir.png'),
             ]
             session.add_all(people)
         
@@ -271,18 +305,12 @@ def seed_data():
 # DAILY POLL RESET FUNCTION
 # ============================================================================
 def reset_poll_votes():
-    """
-    Connects to the DB and resets all poll votes to 0.
-    This meets the "Poll results should reset daily" requirement.
-    """
     print("⏰ EXECUTING DAILY POLL RESET...")
     session = session_factory()
     try:
         session.query(Poll).update({Poll.votes: 0})
         session.commit()
         print("✅ Polls reset successfully.")
-        
-        # Emit a socket event to all clients to refresh their poll data
         socketio.emit('poll_update', {})
     except Exception as e:
         print(f"🔥 ERROR during poll reset: {e}")
@@ -295,33 +323,26 @@ def reset_poll_votes():
 # ============================================================================
 
 def log_activity(type, description):
-    """Logs an event to the DB and emits it to all connected clients."""
     session = Session()
     try:
         new_activity = ActivityLog(type=type, description=description)
         session.add(new_activity)
         session.commit()
-        
         session.refresh(new_activity) 
-        
         activity_data = {
             'id': new_activity.id,
             'type': new_activity.type,
             'description': new_activity.description,
             'timestamp': new_activity.timestamp.isoformat()
         }
-        
         socketio.emit('activity_update', activity_data)
-        
     except Exception as e:
         print(f"🔥 ERROR in log_activity: {e}")
         session.rollback()
     finally:
         Session.remove()
 
-# Helper to convert SQLAlchemy model to dict
 def model_to_dict(model_instance):
-    # This now includes the new video_url field automatically
     return {c.name: getattr(model_instance, c.name) for c in model_instance.__table__.columns}
 
 # ============================================================================
@@ -334,52 +355,41 @@ def shutdown_session(exception=None):
 
 @app.route('/api/players')
 def api_players():
-    """Gets a list of all players."""
     players = Session.query(Player).order_by(Player.current_bid.desc()).all()
     return jsonify([model_to_dict(p) for p in players])
 
 @app.route('/api/players/<int:player_id>')
 def api_player_detail(player_id):
-    """Gets detailed info for a single player, including bid history."""
     player = Session.query(Player).filter_by(id=player_id).first()
-    
     if not player:
         return jsonify({'error': 'Not found'}), 404
-    
     player_data = model_to_dict(player)
     bids = Session.query(Bid).filter_by(player_id=player_id).order_by(Bid.timestamp.desc()).limit(10).all()
     player_data['bid_history'] = [
         {'bidder_name': b.bidder_name, 'bid_amount': b.bid_amount, 'timestamp': b.timestamp.isoformat()} 
         for b in bids
     ]
-    
     return jsonify(player_data)
 
 @app.route('/api/bid', methods=['POST'])
 def api_place_bid():
-    """Submits a new bid for a player."""
     session = Session()
     try:
         data = request.json
         player_id = data.get('player_id')
         bidder_name = data.get('bidder_name')
         bid_amount = int(data.get('bid_amount'))
-        
         player = session.query(Player).filter_by(id=player_id).first()
-        
         if not player:
             return jsonify({'error': 'Player not found'}), 404
-        
         if bid_amount <= player.current_bid:
             return jsonify({'error': f'Bid must be higher than ${player.current_bid:,}'}), 400
         
         player.current_bid = bid_amount
         player.highest_bidder = bidder_name
         player.total_bids = player.total_bids + 1
-        
         new_bid = Bid(player_id=player_id, bidder_name=bidder_name, bid_amount=bid_amount)
         session.add(new_bid)
-        
         session.commit()
         
         log_activity('bid', f'{bidder_name} bid ${bid_amount:,} on {player.name}')
@@ -390,7 +400,6 @@ def api_place_bid():
             'bidder_name': bidder_name,
             'bid_amount': bid_amount
         })
-        
         return jsonify({'success': True, 'message': 'Bid placed successfully!'})
     except Exception as e:
         print(f"🔥 ERROR in api_place_bid: {e}")
@@ -401,7 +410,6 @@ def api_place_bid():
 
 @app.route('/api/enquiry', methods=['POST'])
 def api_enquiry():
-    """Submits a contact form message."""
     session = Session()
     try:
         data = request.json
@@ -412,9 +420,7 @@ def api_enquiry():
         )
         session.add(new_enquiry)
         session.commit()
-        
         log_activity('enquiry', f'New enquiry from {data.get("name")}')
-        
         return jsonify({'success': True, 'message': 'Enquiry submitted successfully!'})
     except Exception as e:
         print(f"🔥 ERROR in api_enquiry: {e}")
@@ -425,28 +431,21 @@ def api_enquiry():
 
 @app.route('/api/poll')
 def api_poll():
-    """Gets the current poll results."""
     teams = Session.query(Poll).order_by(Poll.votes.desc()).all()
     return jsonify([model_to_dict(t) for t in teams])
 
 @app.route('/api/poll/vote', methods=['POST'])
 def api_vote():
-    """Submits a vote for a team."""
     session = Session()
     try:
         team_name = request.json.get('team_name')
         team = session.query(Poll).filter_by(team_name=team_name).first()
-        
         if not team:
             return jsonify({'error': 'Team not found'}), 404
-            
         team.votes = team.votes + 1
         session.commit()
-        
         log_activity('poll', f'Vote cast for {team_name}')
-        
         socketio.emit('poll_update', {})
-        
         return jsonify({'success': True})
     except Exception as e:
         print(f"🔥 ERROR in api_vote: {e}")
@@ -457,7 +456,6 @@ def api_vote():
 
 @app.route('/api/people')
 def api_people():
-    """Gets all coordinators, teams, and faculty."""
     response = {
         "coordinators": [model_to_dict(p) for p in Session.query(Person).filter(Person.role == 'Head Coordinator').order_by(Person.name).all()],
         "teams": [model_to_dict(p) for p in Session.query(Person).filter(Person.role == 'Bidding Team').order_by(Person.name).all()],
@@ -467,13 +465,11 @@ def api_people():
 
 @app.route('/api/activity')
 def api_activity():
-    """Gets the 30 most recent activity items."""
     activities = Session.query(ActivityLog).order_by(ActivityLog.timestamp.desc()).limit(30).all()
     return jsonify([model_to_dict(a) for a in activities])
 
 @app.route('/api/status')
 def api_status():
-    """Gets auction stats (timer, total bids, total value)."""
     session = Session()
     try:
         setting = session.query(Setting).filter_by(id=1).first()
@@ -516,7 +512,7 @@ def health_check():
         return jsonify({"status": "unhealthy", "database": "disconnected"}), 500
 
 # ============================================================================
-# STATIC FILE ROUTE (IMPORTANT)
+# STATIC FILE ROUTE
 # ============================================================================
 
 @app.route('/static/<path:filename>')
@@ -547,15 +543,13 @@ def initialize_database():
     retries = 5
     for i in range(retries):
         try:
-            # This command creates all the tables (including the new video_url column)
             Base.metadata.create_all(engine)
             print("✅ Database tables created (if they didn't exist).")
-            # Seed the database with all the new file paths
             seed_data()
             break
         except OperationalError as e:
             print(f"🔥 Database connection failed (attempt {i+1}/{retries}): {e}")
-            gevent.sleep(5) # Wait 5 seconds before retrying
+            gevent.sleep(5) 
     else:
         print("🔥 CRITICAL: Could not connect to database after retries. Exiting.")
         sys.exit(1)
