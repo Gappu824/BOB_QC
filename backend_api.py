@@ -174,16 +174,16 @@ GDRIVE_FILES = {
     'anuj_sharma': '1FX1e2iOgKU7iXORwxIqQqqq84kLigoZP',
     
     # Teams (10)
-    'byte_busters': '1PxmHD0QVma-uFqh7ebPTb2LmADXCSHvM',
-    'syntax_samurai': '1XCLlvzHbqJo_eFhSD4iE1bgKWVhnf9VF',
-    'ruby_renegades': '1L7b8ntBK70uvUBHVBdmBYlDnrgJSYNg2',
-    'java_jesters': '1-tUbPMMDuiY8bK1RQZiLiYJqHlVtUX2v',
-    'python_pioneers': '185eEp_PCo0ZWrbIMyK6uG4Oup566pZ-1',
-    'quantum_coder': '1FqLX_tW2M7W99WdykM3Ytr_u4fTlM0Kz',
-    'code_trail': '1y4KOQPSIvZLtyLzJg5G6ezn0OsuStJJ9',
-    'data_mavericks': '1fp0aAPfAHG_zQpZIajbqFu0h4Vucd65P',
-    'code_commanders': '1y4KOQPSIvZLtyLzJg5G6ezn0OsuStJJ9',
-    'logic_luminaries': '1ZIv-YBcSL0w0BgolFpDwsw0OSKZIgIhG',
+    'byte_busters': '1BhmUECcEKXmL1YTHZDGk4Gqg9mvrIYWw',
+    'syntax_samurai': '1gR6F62nA3iKSAw7BIFbEoTw4wxnb6iw9',
+    'ruby_renegades': '150DuJHO8bc0tZszqDHnDSVHH8UzlNREU',
+    'java_jesters': '1emUGivwoG8uyEDJiMUkGHhr2qd54gA4a',
+    'python_pioneers': '1n-4zo5lSfVKY6yi8-Dx6wvZeGoVld59T',
+    'quantum_coder': '1VUiVlgRuwO9QTT3eSIUEaA0Jc2g6D5L8',
+    'code_trail': '1VUiVlgRuwO9QTT3eSIUEaA0Jc2g6D5L8',
+    'data_mavericks': '18_Bxr2Z2ZYdUQ6vYl8Qa_ghY2KNyDFiu',
+    'code_commanders': '19MzUrW05_EskjxOh2zycIJ9ahW8WaxQD',
+    'logic_luminaries': '105sMt3RaskTQ8naYvQpdmU5l_kg8HfCO',
     
     # Coordinators (5)
     'hiya_arya': '1PS3tvNFlRqHD7Bkk1j65aKS8E2HRDFsM',
