@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v17 (POSTGRESQL-READY)
+BATTLE OF BYTES - PRODUCTION AUCTION PLATFORM v17 (POSTGRESQL + STATIC FILES)
 =====================================================================
 - Uses PostgreSQL for persistent data on Render's free tier
-- Uses SQLAlchemy ORM instead of raw sqlite3
+- Serves static files (logo, images, videos) from the repo's 'static' folder
 - All API endpoints and WebSocket logic are the same
 - Includes APScheduler to reset polls daily (meets bonus requirement)
+- Database 'Person' model updated with 'video_url'
+- Seeding data updated with paths to all new static assets
 """
 
 import os
@@ -13,21 +15,19 @@ import sys
 import json
 from datetime import datetime, timedelta
 import threading
-import gevent  # For production server
-from apscheduler.schedulers.background import BackgroundScheduler # For poll reset
-from apscheduler.triggers.cron import CronTrigger # For poll reset
+import gevent
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 # Install dependencies
 print('📦 Installing dependencies...')
-# NEW: Added sqlalchemy and psycopg2-binary for PostgreSQL
 os.system(f'{sys.executable} -m pip install flask flask-cors flask-socketio simple-websocket apscheduler gevent sqlalchemy psycopg2-binary -q 2>/dev/null')
 
 try:
-    from flask import Flask, request, jsonify
+    from flask import Flask, request, jsonify, send_from_directory
     from flask_cors import CORS
     from flask_socketio import SocketIO, emit
     
-    # NEW: SQLAlchemy imports
     from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey, func
     from sqlalchemy.ext.declarative import declarative_base
     from sqlalchemy.orm import sessionmaker, scoped_session, relationship
@@ -41,48 +41,45 @@ except ImportError:
 print('✅ Dependencies loaded!\n')
 
 # ============================================================================
-# APPLICATION SETUP (NEW: POSTGRESQL)
+# APPLICATION SETUP
 # ============================================================================
 
-# NEW: Database connection setup
-# Render will provide this DATABASE_URL as an environment variable
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if not DATABASE_URL:
     print("🔥 ERROR: DATABASE_URL environment variable not set.")
-    print("Please create a PostgreSQL database on Render and set this variable.")
-    # Fallback to a local SQLite DB for testing if you want
+    print("This app is designed for a PostgreSQL database (e.g., on Render).")
+    # You can uncomment this next line for local-only testing with SQLite
     # DATABASE_URL = 'sqlite:///./local_auction.db' 
-    # For now, we'll exit if it's not set for production
-    sys.exit(1)
+    if not DATABASE_URL.startswith('sqlite'):
+        sys.exit(1)
 
-# Fix for Render's PostgreSQL URL if it starts with 'postgres://'
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 print(f"📁 Connecting to database...")
-
 try:
     engine = create_engine(DATABASE_URL)
     Base = declarative_base()
-    # Use scoped_session for thread-safe session management in Flask
     session_factory = sessionmaker(bind=engine)
     Session = scoped_session(session_factory)
 except Exception as e:
     print(f"🔥 Failed to connect to database: {e}")
     sys.exit(1)
-
 print("✅ Database connection initiated.")
 
-app = Flask(__name__)
+# Define the static folder. This tells Flask to look for a folder named 'static'
+# in the same directory as this script.
+STATIC_FOLDER = os.path.join(os.path.dirname(__file__), 'static')
+app = Flask(__name__, static_folder=STATIC_FOLDER) 
+
 app.config['SECRET_KEY'] = 'auction-secret-2025'
 CORS(app) 
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 # ============================================================================
-# DATABASE MODELS (NEW: SQLAlchemy ORM)
+# DATABASE MODELS (UPDATED)
 # ============================================================================
 
-# This replaces all the 'CREATE TABLE' SQL commands
 class Player(Base):
     __tablename__ = 'players'
     id = Column(Integer, primary_key=True)
@@ -130,6 +127,7 @@ class Person(Base):
     bio = Column(Text)
     image_url = Column(String)
     social_handle = Column(String)
+    video_url = Column(String)  # <-- UPDATED: Added video_url
 
 class ActivityLog(Base):
     __tablename__ = 'activity_log'
@@ -144,7 +142,7 @@ class Setting(Base):
     end_time = Column(String) # ISO format
 
 # ============================================================================
-# DATABASE SEEDING (NEW: SQLAlchemy)
+# DATABASE SEEDING (UPDATED)
 # ============================================================================
 
 def seed_data():
@@ -180,17 +178,73 @@ def seed_data():
 
         if session.query(Person).count() == 0:
             print("🌱 Seeding People (Coordinators, Teams, Faculty)...")
+            
+            # --- UPDATED TO MATCH YOUR FILE NAMES ---
             people = [
+                # HEAD COORDINATORS (using your new .png files)
                 Person(name='Hiya Arya', role='Head Coordinator', email='hiya@battleofbytes.com', 
-                       bio='Promotion & Operation Lead for Battle of Bytes 2.0', image_url='https://i.pravatar.cc/300?img=1', social_handle='@hushhiya'),
+                       bio='Promotion & Operation Lead', image_url='/static/hiya_arya.png', 
+                       social_handle='@hushhiya'),
                 Person(name='Ashank Agrawal', role='Head Coordinator', email='ashank@battleofbytes.com',
-                       bio='Co Tech Lead orchestrating the technical aspects', image_url='https://i.pravatar.cc/300?img=2', social_handle='@ashankagrawal'),
+                       bio='Co Tech Lead', image_url='/static/ashank_agrawal.png', 
+                       social_handle='@ashankagrawal'),
+                Person(name='Sarthak Sinha', role='Head Coordinator', email='sarthak@battleofbytes.com',
+                       bio='Design & Social Media Lead', image_url='/static/sarthak_sinha.png', 
+                       social_handle='@sarthak.sinhahaha'),
+                Person(name='Manalika Agarwal', role='Head Coordinator', email='manalika@battleofbytes.com',
+                       bio='Co Tech Lead', image_url='/static/manalika_agarwal.png', 
+                       social_handle='@manalika__'),
+                Person(name='Somya Upadhyay', role='Head Coordinator', email='somya@battleofbytes.com',
+                       bio='Sponsorship Lead', image_url='/static/somya_upadhyay.png', 
+                       social_handle='@__.somyaaaaa__'),
+                
+                # BIDDING TEAMS (using both .jpg and .mp4 files)
                 Person(name='Java Jesters', role='Bidding Team', email='captains@jesters.com', 
                        bio='Known for meticulous planning and aggressive bidding strategies.', 
-                       image_url='https://i.pravatar.cc/300?img=5'),
+                       image_url='/static/java_jesters.jpg',
+                       video_url='/static/java_jesters_video.mp4'),
+                
                 Person(name='Quantum Coder', role='Bidding Team', email='lead@quantum.dev', 
                        bio='A mysterious team with deep pockets.', 
-                       image_url='https://i.pravatar.cc/300?img=6'),
+                       image_url='/static/quantum_coder.jpg',
+                       video_url='/static/quantum_coder_video.mp4'),
+                
+                Person(name='Syntax Samurai', role='Bidding Team', email='master@samurai.io', 
+                       bio='They strike with precision, waiting for the perfect moment.', 
+                       image_url='/static/syntax_samurai.jpg',
+                       video_url='/static/syntax_samurai_video.mp4'),
+
+                Person(name='Logic Luminaries', role='Bidding Team', email='info@luminaries.ai', 
+                       bio='Data-driven and analytical, they bid only on proven assets.', 
+                       image_url='/static/logic_luminaries.jpg',
+                       video_url='/static/logic_luminaries_video.mp4'),
+                       
+                Person(name='Byte Busters', role='Bidding Team', email='contact@busters.org', 
+                       bio='A crowd favorite, known for breaking the bank and taking risks.', 
+                       image_url='/static/byte_busters.jpg',
+                       video_url='/static/byte_busters_video.mp4'),
+
+                Person(name='Python Pioneers', role='Bidding Team', email='team@pioneers.py', 
+                       bio='Specialists in data science and ML talent.', 
+                       image_url='/static/python_pioneers.jpg',
+                       video_url='/static/python_pioneers_video.mp4'),
+
+                Person(name='Code Commanders', role='Bidding Team', email='hq@commanders.com', 
+                       bio='Strategic and disciplined budget management.', 
+                       image_url='/static/code_commanders.jpg',
+                       video_url='/static/code_commanders_video.mp4'),
+
+                Person(name='Ruby Renegades', role='Bidding Team', email='hello@renegades.rb', 
+                       bio='The dark horse team, looking for unconventional talent.', 
+                       image_url='/static/ruby_renegades.jpg',
+                       video_url='/static/ruby_renegades_video.mp4'),
+
+                Person(name='Data Mavericks', role='Bidding Team', email='scouts@mavericks.db', 
+                       bio='Focused entirely on backend and database superstars.', 
+                       image_url='/static/data_mavericks.jpg',
+                       video_url='/static/data_mavericks_video.mp4'),
+                
+                # FACULTY (using placeholders for now)
                 Person(name='Dr. Priya Sharma', role='Faculty Advisor', email='p.sharma@college.edu', 
                        bio='Head Faculty Coordinator overseeing all event logistics.', 
                        image_url='https://i.pravatar.cc/300?img=60'),
@@ -214,7 +268,7 @@ def seed_data():
         Session.remove()
 
 # ============================================================================
-# DAILY POLL RESET FUNCTION (UPDATED FOR SQLAlchemy)
+# DAILY POLL RESET FUNCTION
 # ============================================================================
 def reset_poll_votes():
     """
@@ -222,7 +276,6 @@ def reset_poll_votes():
     This meets the "Poll results should reset daily" requirement.
     """
     print("⏰ EXECUTING DAILY POLL RESET...")
-    # Use a new session from the factory for the background thread
     session = session_factory()
     try:
         session.query(Poll).update({Poll.votes: 0})
@@ -249,10 +302,8 @@ def log_activity(type, description):
         session.add(new_activity)
         session.commit()
         
-        # Re-fetch to get timestamp and ID
         session.refresh(new_activity) 
         
-        # Convert to dict for JSON serialization
         activity_data = {
             'id': new_activity.id,
             'type': new_activity.type,
@@ -270,13 +321,13 @@ def log_activity(type, description):
 
 # Helper to convert SQLAlchemy model to dict
 def model_to_dict(model_instance):
+    # This now includes the new video_url field automatically
     return {c.name: getattr(model_instance, c.name) for c in model_instance.__table__.columns}
 
 # ============================================================================
-# FLASK API ROUTES (UPDATED FOR SQLAlchemy)
+# FLASK API ROUTES
 # ============================================================================
 
-# This ensures the session is removed after each request
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     Session.remove()
@@ -296,7 +347,6 @@ def api_player_detail(player_id):
         return jsonify({'error': 'Not found'}), 404
     
     player_data = model_to_dict(player)
-    # Get top 10 bids
     bids = Session.query(Bid).filter_by(player_id=player_id).order_by(Bid.timestamp.desc()).limit(10).all()
     player_data['bid_history'] = [
         {'bidder_name': b.bidder_name, 'bid_amount': b.bid_amount, 'timestamp': b.timestamp.isoformat()} 
@@ -323,12 +373,10 @@ def api_place_bid():
         if bid_amount <= player.current_bid:
             return jsonify({'error': f'Bid must be higher than ${player.current_bid:,}'}), 400
         
-        # Update player
         player.current_bid = bid_amount
         player.highest_bidder = bidder_name
         player.total_bids = player.total_bids + 1
         
-        # Add new bid record
         new_bid = Bid(player_id=player_id, bidder_name=bidder_name, bid_amount=bid_amount)
         session.add(new_bid)
         
@@ -430,9 +478,8 @@ def api_status():
     try:
         setting = session.query(Setting).filter_by(id=1).first()
         if not setting:
-            # This should only happen once
             print("⚠️ No settings found, reseeding data...")
-            seed_data() # Re-run seed to create settings
+            seed_data()
             setting = session.query(Setting).filter_by(id=1).first()
             if not setting:
                 return jsonify({'error': 'Failed to initialize settings'}), 500
@@ -456,10 +503,9 @@ def api_status():
     finally:
         Session.remove()
 
-# Simple health-check route for Render
 @app.route('/health')
 def health_check():
-    # NEW: Check DB connection as part of health check
+    """Health check for Render."""
     try:
         session = Session()
         session.execute('SELECT 1')
@@ -468,6 +514,15 @@ def health_check():
     except Exception as e:
         print(f"💔 Health check failed: {e}")
         return jsonify({"status": "unhealthy", "database": "disconnected"}), 500
+
+# ============================================================================
+# STATIC FILE ROUTE (IMPORTANT)
+# ============================================================================
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """This route serves all files from your 'static' folder."""
+    return send_from_directory(app.static_folder, filename)
 
 # ============================================================================
 # WEBSOCKET EVENTS
@@ -492,10 +547,10 @@ def initialize_database():
     retries = 5
     for i in range(retries):
         try:
-            # This command creates all the tables
+            # This command creates all the tables (including the new video_url column)
             Base.metadata.create_all(engine)
             print("✅ Database tables created (if they didn't exist).")
-            # Seed the database
+            # Seed the database with all the new file paths
             seed_data()
             break
         except OperationalError as e:
@@ -508,13 +563,11 @@ def initialize_database():
 
 def start_server():
     print('\n' + '='*80)
-    print('🏆 BATTLE OF BYTES 2.0 - PRODUCTION AUCTION (POSTGRESQL API)')
+    print('🏆 BATTLE OF BYTES 2.0 - PRODUCTION AUCTION (POSTGRESQL + STATIC FILES)')
     print('='*80)
     
-    # NEW: Initialize DB *before* starting the scheduler or server
     initialize_database()
     
-    # Initialize and start the scheduler for daily poll reset
     try:
         scheduler = BackgroundScheduler()
         scheduler.add_job(reset_poll_votes, trigger=CronTrigger(hour=0, minute=0))
@@ -525,7 +578,8 @@ def start_server():
 
     port = int(os.environ.get('PORT', 5000))
     
-    print(f'\n🚀 Starting server on http://0.0.0.0:{port}')
+    print(f"\n🚀 Starting server on http://0.0.0.0:{port}")
+    print(f"📁 Serving static files from: {STATIC_FOLDER}")
     print('='*80 + '\n')
     
     socketio.run(app, host='0.0.0.0', port=port)
