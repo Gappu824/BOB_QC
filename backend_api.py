@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-BATTLE OF BYTES - PRODUCTION BACKEND (FINAL WITH REAL IMAGES)
-============================================================
-✅ All images pointing to actual static files
-✅ Player images: Using your uploaded JPG files
-✅ Team images: Using your uploaded JPG files  
-✅ Coordinator images: Using your uploaded PNG files
-✅ Faculty images: Using your uploaded JPG files
+BATTLE OF BYTES - PRODUCTION BACKEND (GITHUB RAW URLS)
+======================================================
+✅ All images hosted on GitHub (free)
+✅ Using raw.githubusercontent.com URLs
+✅ No static folder needed on Render
+✅ Works on free tier
 """
 
 import os
@@ -49,11 +48,13 @@ except Exception as e:
     sys.exit(1)
 print("✅ Database connected")
 
-STATIC_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
-app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='/static')
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'auction-secret-2025'
 CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
+
+# GitHub Raw URL Base
+GITHUB_RAW = "https://raw.githubusercontent.com/Gappu824/BOB_OC/main/static"
 
 # ============================================================================
 # DATABASE MODELS
@@ -155,7 +156,7 @@ def migrate_database():
         Session.remove()
 
 # ============================================================================
-# DATABASE SEEDING (WITH REAL IMAGE PATHS)
+# DATABASE SEEDING (WITH GITHUB RAW URLS)
 # ============================================================================
 
 def seed_data():
@@ -168,83 +169,83 @@ def seed_data():
             session.query(Player).delete()
             session.commit()
         
-        print("🌱 Seeding Players (10 participants with REAL images)...")
+        print("🌱 Seeding Players (10 participants with GitHub URLs)...")
         players = [
             Player(id=1, name='Abhinav Gupta', nickname='The Strategist', role='BTECH/25006/23', 
                    base_price=10000, current_bid=10000,
-                   image_url='/static/abhinav_gupta.jpg',
+                   image_url=f'{GITHUB_RAW}/abhinav_gupta.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=2, name='Manisha Parwani', nickname='Code Ninja', role='BTECH/25063/23',
                    base_price=12000, current_bid=12000,
-                   image_url='/static/manisha_parwani.jpg',
+                   image_url=f'{GITHUB_RAW}/manisha_parwani.jpg',
                    bio='DBMS: ⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=3, name='Aviral Sharma', nickname='Data Wizard', role='BTECH/25150/23',
                    base_price=15000, current_bid=15000,
-                   image_url='/static/aviral_sharma.jpg',
+                   image_url=f'{GITHUB_RAW}/aviral_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=4, name='Shruti Khandelwal', nickname='Cloud Queen', role='MCA/25015/25',
                    base_price=11000, current_bid=11000,
-                   image_url='/static/shruti_khandelwal.jpg',
+                   image_url=f'{GITHUB_RAW}/shruti_khandelwal.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=5, name='Karan Parwani', nickname='Full Stack Pro', role='MCA/25007/25',
                    base_price=13000, current_bid=13000,
-                   image_url='/static/karan_parwani.jpg',
+                   image_url=f'{GITHUB_RAW}/karan_parwani.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=6, name='Naina V Pancholi', nickname='Backend Expert', role='BTECH/25030/22',
                    base_price=14000, current_bid=14000,
-                   image_url='/static/naina_pancholi.jpg',
+                   image_url=f'{GITHUB_RAW}/naina_pancholi.jpg',
                    bio='DBMS: ⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=7, name='Hemang Bhabhra', nickname='Algorithm Master', role='BTECH/25027/22',
                    base_price=12500, current_bid=12500,
-                   image_url='/static/hemang_bhabhra.jpg',
+                   image_url=f'{GITHUB_RAW}/hemang_bhabhra.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=8, name='Yashika Sharma', nickname='Frontend Wizard', role='MSCAI/25002/25',
                    base_price=11500, current_bid=11500,
-                   image_url='/static/yashika_sharma.jpg',
+                   image_url=f'{GITHUB_RAW}/yashika_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=9, name='Piyush Singh Dhakad', nickname='DevOps Guru', role='MSCAI/25005/25',
                    base_price=13500, current_bid=13500,
-                   image_url='/static/piyush_dhakad.jpg',
+                   image_url=f'{GITHUB_RAW}/piyush_dhakad.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
             
             Player(id=10, name='Anuj Sharma', nickname='ML Engineer', role='MCA/25022/25',
                    base_price=12000, current_bid=12000,
-                   image_url='/static/anuj_sharma.jpg',
+                   image_url=f'{GITHUB_RAW}/anuj_sharma.jpg',
                    bio='DBMS: ⭐⭐⭐⭐ | Python: ⭐⭐⭐⭐ | C/C++: ⭐⭐⭐⭐ | Java: ⭐⭐⭐⭐⭐ | DSA: ⭐⭐⭐⭐',
                    skills='DBMS,Python,C/C++,Java,DSA', total_bids=0),
         ]
         session.add_all(players)
         
         if session.query(Poll).count() == 0:
-            print("🌱 Seeding Poll Teams (with REAL images)...")
+            print("🌱 Seeding Poll Teams (with GitHub URLs)...")
             teams = [
-                Poll(team_name='Byte Busters', image_url='/static/byte_busters.jpg', video_url='/static/byte_busters_video.mp4'),
-                Poll(team_name='Syntax Samurai', image_url='/static/syntax_samurai.jpg', video_url='/static/syntax_samurai_video.mp4'),
-                Poll(team_name='Ruby Renegades', image_url='/static/ruby_renegades.jpg', video_url='/static/ruby_renegades_video.mp4'),
-                Poll(team_name='Java Jesters', image_url='/static/java_jesters.jpg', video_url='/static/java_jesters_video.mp4'),
-                Poll(team_name='Python Pioneers', image_url='/static/python_pioneers.jpg', video_url='/static/python_pioneers_video.mp4'),
-                Poll(team_name='Quantum Coders', image_url='/static/quantum_coder.jpg', video_url='/static/quantum_coder_video.mp4'),
-                Poll(team_name='Code Trail', image_url='/static/code_trail.jpg', video_url='/static/code_trail_video.mp4'),
-                Poll(team_name='Data Mavericks', image_url='/static/data_mavericks.jpg', video_url='/static/data_mavericks_video.mp4'),
-                Poll(team_name='Code Commanders', image_url='/static/code_commanders.jpg', video_url='/static/code_commanders_video.mp4'),
-                Poll(team_name='Logic Luminaries', image_url='/static/logic_luminaries.jpg', video_url='/static/logic_luminaries_video.mp4'),
+                Poll(team_name='Byte Busters', image_url=f'{GITHUB_RAW}/byte_busters.jpg', video_url=f'{GITHUB_RAW}/byte_busters_video.mp4'),
+                Poll(team_name='Syntax Samurai', image_url=f'{GITHUB_RAW}/syntax_samurai.jpg', video_url=f'{GITHUB_RAW}/syntax_samurai_video.mp4'),
+                Poll(team_name='Ruby Renegades', image_url=f'{GITHUB_RAW}/ruby_renegades.jpg', video_url=f'{GITHUB_RAW}/ruby_renegades_video.mp4'),
+                Poll(team_name='Java Jesters', image_url=f'{GITHUB_RAW}/java_jesters.jpg', video_url=f'{GITHUB_RAW}/java_jesters_video.mp4'),
+                Poll(team_name='Python Pioneers', image_url=f'{GITHUB_RAW}/python_pioneers.jpg', video_url=f'{GITHUB_RAW}/python_pioneers_video.mp4'),
+                Poll(team_name='Quantum Coders', image_url=f'{GITHUB_RAW}/quantum_coder.jpg', video_url=f'{GITHUB_RAW}/quantum_coder_video.mp4'),
+                Poll(team_name='Code Trail', image_url=f'{GITHUB_RAW}/code_trail.jpg', video_url=f'{GITHUB_RAW}/code_trail_video.mp4'),
+                Poll(team_name='Data Mavericks', image_url=f'{GITHUB_RAW}/data_mavericks.jpg', video_url=f'{GITHUB_RAW}/data_mavericks_video.mp4'),
+                Poll(team_name='Code Commanders', image_url=f'{GITHUB_RAW}/code_commanders.jpg', video_url=f'{GITHUB_RAW}/code_commanders_video.mp4'),
+                Poll(team_name='Logic Luminaries', image_url=f'{GITHUB_RAW}/logic_luminaries.jpg', video_url=f'{GITHUB_RAW}/logic_luminaries_video.mp4'),
             ]
             session.add_all(teams)
 
@@ -254,79 +255,79 @@ def seed_data():
             session.query(Person).delete()
             session.commit()
         
-        print("🌱 Seeding People (with REAL images)...")
+        print("🌱 Seeding People (with GitHub URLs)...")
         people = [
-            # HEAD COORDINATORS (using PNG files from your static folder)
+            # HEAD COORDINATORS (using PNG files from GitHub)
             Person(name='Hiya Arya', role='Head Coordinator', email='hiya@bob.com', 
                    bio='Promotion & Operation Lead', 
-                   image_url='/static/hiya_arya.png', 
+                   image_url=f'{GITHUB_RAW}/hiya_arya.png', 
                    social_handle='@hushhiya'),
             Person(name='Ashank Agrawal', role='Head Coordinator', email='ashank@bob.com',
                    bio='Co Tech Lead', 
-                   image_url='/static/ashank_agrawal.png', 
+                   image_url=f'{GITHUB_RAW}/ashank_agrawal.png', 
                    social_handle='@ashankagrawal'),
             Person(name='Sarthak Sinha', role='Head Coordinator', email='sarthak@bob.com',
                    bio='Design & Social Media Lead', 
-                   image_url='/static/sarthak_sinha.png', 
+                   image_url=f'{GITHUB_RAW}/sarthak_sinha.png', 
                    social_handle='@sarthak.sinhahaha'),
             Person(name='Manalika Agarwal', role='Head Coordinator', email='manalika@bob.com',
                    bio='Co Tech Lead', 
-                   image_url='/static/manalika_agarwal.png', 
+                   image_url=f'{GITHUB_RAW}/manalika_agarwal.png', 
                    social_handle='@manalika__'),
             Person(name='Somya Upadhyay', role='Head Coordinator', email='somya@bob.com',
                    bio='Sponsorship Lead', 
-                   image_url='/static/somya_upadhyay.png', 
+                   image_url=f'{GITHUB_RAW}/somya_upadhyay.png', 
                    social_handle='@__.somyaaaaa__'),
             
-            # BIDDING TEAMS (using JPG files from your static folder)
+            # BIDDING TEAMS (using JPG files from GitHub)
             Person(name='Byte Busters', role='Bidding Team', email='busters@team.com', 
                    bio='Mentored by Anju Ma\'am. Risk-takers and crowd favorites.',
-                   image_url='/static/byte_busters.jpg', 
-                   video_url='/static/byte_busters_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/byte_busters.jpg', 
+                   video_url=f'{GITHUB_RAW}/byte_busters_video.mp4'),
             Person(name='Syntax Samurai', role='Bidding Team', email='samurai@team.com', 
                    bio='Mentored by Vivek Gaur Sir & Madan Sir. Precision bidding experts.',
-                   image_url='/static/syntax_samurai.jpg', 
-                   video_url='/static/syntax_samurai_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/syntax_samurai.jpg', 
+                   video_url=f'{GITHUB_RAW}/syntax_samurai_video.mp4'),
             Person(name='Ruby Renegades', role='Bidding Team', email='renegades@team.com', 
                    bio='Mentored by Abhishek Sir & Santosh Kumar Agarwal Sir. The dark horse team.',
-                   image_url='/static/ruby_renegades.jpg', 
-                   video_url='/static/ruby_renegades_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/ruby_renegades.jpg', 
+                   video_url=f'{GITHUB_RAW}/ruby_renegades_video.mp4'),
             Person(name='Java Jesters', role='Bidding Team', email='jesters@team.com', 
                    bio='Mentored by Santosh Sharma Sir. Meticulous planners.',
-                   image_url='/static/java_jesters.jpg', 
-                   video_url='/static/java_jesters_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/java_jesters.jpg', 
+                   video_url=f'{GITHUB_RAW}/java_jesters_video.mp4'),
             Person(name='Python Pioneers', role='Bidding Team', email='pioneers@team.com', 
                    bio='Mentored by Seema Ma\'am & Archana Ma\'am. Data science specialists.',
-                   image_url='/static/python_pioneers.jpg', 
-                   video_url='/static/python_pioneers_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/python_pioneers.jpg', 
+                   video_url=f'{GITHUB_RAW}/python_pioneers_video.mp4'),
             Person(name='Quantum Coders', role='Bidding Team', email='quantum@team.com', 
                    bio='Mentored by Pankaj Sir. Deep pockets, high potential focus.',
-                   image_url='/static/quantum_coder.jpg', 
-                   video_url='/static/quantum_coder_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/quantum_coder.jpg', 
+                   video_url=f'{GITHUB_RAW}/quantum_coder_video.mp4'),
             Person(name='Code Trail', role='Bidding Team', email='trail@team.com', 
                    bio='Mentored by Gurminder Sir. Newest team with fresh tactics.',
-                   image_url='/static/code_trail.jpg', 
-                   video_url='/static/code_trail_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/code_trail.jpg', 
+                   video_url=f'{GITHUB_RAW}/code_trail_video.mp4'),
             Person(name='Data Mavericks', role='Bidding Team', email='mavericks@team.com', 
                    bio='Mentored by B. Pathak Sir. Backend database experts.',
-                   image_url='/static/data_mavericks.jpg', 
-                   video_url='/static/data_mavericks_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/data_mavericks.jpg', 
+                   video_url=f'{GITHUB_RAW}/data_mavericks_video.mp4'),
             Person(name='Code Commanders', role='Bidding Team', email='commanders@team.com', 
                    bio='Mentored by Puneet Sir. Strategic budget managers.',
-                   image_url='/static/code_commanders.jpg', 
-                   video_url='/static/code_commanders_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/code_commanders.jpg', 
+                   video_url=f'{GITHUB_RAW}/code_commanders_video.mp4'),
             Person(name='Logic Luminaries', role='Bidding Team', email='luminaries@team.com', 
                    bio='Mentored by Vishambhar Pathak Sir. Data-driven analysts.',
-                   image_url='/static/logic_luminaries.jpg', 
-                   video_url='/static/logic_luminaries_video.mp4'),
+                   image_url=f'{GITHUB_RAW}/logic_luminaries.jpg', 
+                   video_url=f'{GITHUB_RAW}/logic_luminaries_video.mp4'),
             
-            # FACULTY & ADVISORS (using JPG files from your static folder)
+            # FACULTY & ADVISORS (using JPG files from GitHub)
             Person(name='Shripal Sir', role='Faculty Advisor', email='shripal@college.edu', 
                    bio='Senior faculty overseeing Battle of Bytes.', 
-                   image_url='/static/shripal_sir.jpg'),
+                   image_url=f'{GITHUB_RAW}/shripal_sir.jpg'),
             Person(name='Piyush Sir', role='Faculty Advisor', email='piyush@college.edu', 
                    bio='Faculty coordinator managing logistics.', 
-                   image_url='/static/piyush_sir.jpg'),
+                   image_url=f'{GITHUB_RAW}/piyush_sir.jpg'),
         ]
         session.add_all(people)
         
@@ -336,7 +337,7 @@ def seed_data():
             session.add(Setting(id=1, end_time=end_time))
             
         session.commit()
-        print('✅ Database seeded with REAL image paths!')
+        print('✅ Database seeded with GitHub Raw URLs!')
     except Exception as e:
         print(f"🔥 Seeding error: {e}")
         session.rollback()
@@ -423,7 +424,6 @@ def api_place_bid():
         if bid_amount <= player.current_bid:
             return jsonify({'error': f'Bid must be > ${player.current_bid:,}'}), 400
         
-        # Store player name before commit to avoid detached instance
         player_name = player.name
         
         player.current_bid = bid_amount
@@ -532,26 +532,18 @@ def health_check():
     except: 
         return jsonify({"status": "unhealthy"}), 500
 
-@app.route('/static/<path:filename>')
-def serve_static(filename):
-    try: 
-        return send_from_directory(app.static_folder, filename)
-    except: 
-        return jsonify({'error': 'File not found'}), 404
-
 @app.route('/')
 def index():
     return render_template_string("""
     <!DOCTYPE html>
     <html><head><title>Battle of Bytes API</title></head>
     <body style="font-family:Arial;padding:40px;background:#0a0a0a;color:#fff;">
-        <h1>🏆 Battle of Bytes API - Using Real Images</h1>
-        <h2>✅ All Images Now Point to Static Folder:</h2>
+        <h1>🏆 Battle of Bytes API - GitHub Hosted Images</h1>
+        <h2>✅ All Images from GitHub Raw:</h2>
         <ul style="color:#22c55e;">
-            <li>✅ Player images from /static/*.jpg</li>
-            <li>✅ Team images from /static/*.jpg</li>
-            <li>✅ Coordinator images from /static/*.png</li>
-            <li>✅ Faculty images from /static/*.jpg</li>
+            <li>✅ No static folder needed on Render</li>
+            <li>✅ Works on free tier</li>
+            <li>✅ Images load from raw.githubusercontent.com</li>
         </ul>
         <h2>API Endpoints:</h2>
         <ul>
@@ -560,6 +552,8 @@ def index():
             <li><a href="/api/people" style="color:#0071e3;">/api/people</a></li>
             <li><a href="/api/status" style="color:#0071e3;">/api/status</a></li>
         </ul>
+        <h2>🖼️ Example Image URL:</h2>
+        <p style="color:#888;">https://raw.githubusercontent.com/Gappu824/BOB_OC/main/static/abhinav_gupta.jpg</p>
     </body></html>
     """)
 
@@ -598,7 +592,7 @@ def initialize_database():
 
 def start_server():
     print('\n' + '='*80)
-    print('🏆 BATTLE OF BYTES 2.0 - PRODUCTION (REAL IMAGES)')
+    print('🏆 BATTLE OF BYTES 2.0 - GITHUB HOSTED IMAGES')
     print('='*80)
     
     initialize_database()
@@ -613,12 +607,8 @@ def start_server():
 
     port = int(os.environ.get('PORT', 5000))
     print(f"\n🚀 Server: http://0.0.0.0:{port}")
-    print(f"📁 Static: {STATIC_FOLDER}")
-    print(f"\n✅ ALL IMAGES FROM STATIC FOLDER:")
-    print(f"   • Players: abhinav_gupta.jpg, manisha_parwani.jpg, etc.")
-    print(f"   • Teams: byte_busters.jpg, syntax_samurai.jpg, etc.")
-    print(f"   • Coordinators: hiya_arya.png, ashank_agrawal.png, etc.")
-    print(f"   • Faculty: shripal_sir.jpg, piyush_sir.jpg")
+    print(f"🌐 Images from: {GITHUB_RAW}")
+    print(f"\n✅ USING GITHUB RAW URLS - NO STATIC FOLDER NEEDED")
     print('='*80 + '\n')
     
     socketio.run(app, host='0.0.0.0', port=port, debug=False)
